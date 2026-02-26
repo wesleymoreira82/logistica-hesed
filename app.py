@@ -94,4 +94,31 @@ else:
         f"PEDIDO: #{pedido}\n"
         f"CLIENTE: {nome}\n"
         f"TELEFONE: {telefone}\n"
-        f"
+        f"E-MAIL: {email_input}\n"
+        f"ENDEREÇO: {endereco_linha}\n"
+        f"{bairro}\n"
+        f"CIDADE: {cidade} - {uf}\n"
+        f"CEP: {cep_input}"
+    )
+
+    st.subheader("Conferir Dados de Entrega")
+    st.info(resumo_texto)
+    
+    # Botão de Envio Único
+    if st.button("Confirmar e Enviar para a Loja"):
+        try:
+            # Conexão segura via Secrets do Streamlit
+            creds_info = st.secrets["gcp_service_account"]
+            scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+            creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
+            client = gspread.authorize(creds)
+            
+            # Abertura da planilha e envio de coluna única
+            sheet = client.open("Logistica_Hesed").sheet1
+            sheet.append_row([resumo_texto])
+            
+            st.success("Dados enviados com sucesso!")
+            st.balloons()
+            
+        except Exception as e:
+            st.error(f"Erro técnico ao salvar: {e}")
