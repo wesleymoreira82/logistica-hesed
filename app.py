@@ -3,110 +3,69 @@ import requests
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# 1. Configuracao da Identidade Visual
+# 1. Identidade Visual
 st.set_page_config(page_title="Confirmacao de Endereco - Loja Hesed", page_icon="🙏")
-
 st.title("Confirmacao de Entrega - Loja Hesed Imaculada")
-st.write("Por caridade, preencha os dados abaixo para o reenvio do seu pedido.")
 
-# Inicializacao do estado da sessao
+# Estado da sessao para o CEP
 if 'rua' not in st.session_state:
-    st.session_state.rua = ""
-    st.session_state.bairro = ""
-    st.session_state.cidade = ""
-    st.session_state.uf = ""
-    st.session_state.erro_cep = ""
+    st.session_state.update({'rua': "", 'bairro': "", 'cidade': "", 'uf': "", 'erro_cep': ""})
 
-# Funcao para buscar o CEP
 def buscar_cep():
     cep = st.session_state.cep_digito.replace("-", "").replace(".", "").strip()
     st.session_state.erro_cep = "" 
-    
     if len(cep) == 8:
         try:
-            response = requests.get(f"https://viacep.com.br/ws/{cep}/json/").json()
-            if "erro" not in response:
-                st.session_state.rua = response.get("logradouro", "")
-                st.session_state.bairro = response.get("bairro", "")
-                st.session_state.cidade = response.get("localidade", "")
-                st.session_state.uf = response.get("uf", "")
+            res = requests.get(f"https://viacep.com.br/ws/{cep}/json/").json()
+            if "erro" not in res:
+                st.session_state.update({'rua': res.get("logradouro", ""), 'bairro': res.get("bairro", ""), 
+                                       'cidade': res.get("localidade", ""), 'uf': res.get("uf", "")})
             else:
-                st.session_state.erro_cep = "CEP nao encontrado. Por favor, verifique o numero."
-                st.session_state.rua = ""
+                st.session_state.erro_cep = "CEP nao encontrado."
         except:
-            st.session_state.erro_cep = "Erro de conexao ao validar o CEP."
+            st.session_state.erro_cep = "Erro na busca do CEP."
 
-# 2. Entrada de Dados
+# 2. Campos
 pedido = st.text_input("Numero do Pedido")
 nome = st.text_input("Nome Completo")
-
-col_tel, col_email = st.columns(2)
-with col_tel:
-    telefone = st.text_input("Telefone de Contato (com DDD)")
-with col_email:
-    email_input = st.text_input("E-mail")
+col1, col2 = st.columns(2)
+with col1: telefone = st.text_input("Telefone")
+with col2: email = st.text_input("E-mail")
 
 st.divider()
-
-if st.session_state.erro_cep:
-    st.error(st.session_state.erro_cep)
-
+if st.session_state.erro_cep: st.error(st.session_state.erro_cep)
 cep_input = st.text_input("CEP", max_chars=9, key="cep_digito", on_change=buscar_cep)
-
-rua = st.text_input("Logradouro (Rua/Avenida)", value=st.session_state.rua)
-
-col_num, col_comp = st.columns([1, 2])
-with col_num:
-    numero = st.text_input("Numero")
-with col_comp:
-    complemento = st.text_input("Complemento (Ex: Casa 12 A)")
-
+rua = st.text_input("Logradouro", value=st.session_state.rua)
+c_n, c_c = st.columns([1, 2])
+with c_n: numero = st.text_input("Numero")
+with c_c: complemento = st.text_input("Complemento")
 bairro = st.text_input("Bairro", value=st.session_state.bairro)
+c_ci, c_uf = st.columns([3, 1])
+with c_ci: cidade = st.text_input("Cidade", value=st.session_state.cidade)
+with c_uf: uf = st.text_input("UF", value=st.session_state.uf)
 
-col_cid, col_uf = st.columns([3, 1])
-with col_cid:
-    cidade = st.text_input("Cidade", value=st.session_state.cidade)
-with col_uf:
-    uf = st.text_input("UF", value=st.session_state.uf)
-
-st.divider()
-
-# 3. Pre-visualizacao e Envio Único
-if not pedido or not nome or not cep_input or not numero or st.session_state.erro_cep:
-    st.warning("Preencha os campos obrigatorios para liberar a confirmacao.")
-else:
-    # Montagem do resumo formatado incluindo E-mail
-    endereco_linha = f"{rua}, {numero}"
-    if complemento:
-        endereco_linha += f" ({complemento})"
+# 3. Resumo e Envio
+if pedido and nome and cep_input and numero and not st.session_state.erro_cep:
+    end_formatado = f"{rua}, {numero}" + (f" ({complemento})" if complemento else "")
+    resumo = (f"PEDIDO: #{pedido}\nCLIENTE: {nome}\nTELEFONE: {telefone}\n"
+              f"E-MAIL: {email}\nENDERECO: {end_formatado}\n{bairro}\n"
+              f"CIDADE: {cidade} - {uf}\nCEP: {cep_input}")
     
-    # Criando o bloco de texto formatado
-    resumo_texto = (
-        f"PEDIDO: #{pedido}\n"
-        f"CLIENTE: {nome}\n"
-        f"TELEFONE: {telefone}\n"
-        f"E-MAIL: {email_input}\n"
-        f"ENDERECO: {endereco_linha}\n"
-        f"{bairro}\n"
-        f"CIDADE: {cidade} - {uf}\n"
-        f"CEP: {cep_input}"
-    )
-
-    st.subheader("Conferir Dados de Entrega")
-    st.info(resumo_texto)
+    st.subheader("Conferir Dados")
+    st.info(resumo)
     
-    if st.button("Confirmar e Enviar para a Loja"):
+    if st.button("Confirmar e Enviar"):
         try:
+            # CONEXAO VIA SECRETS (O SEGREDO DO SUCESSO)
+            creds_info = st.secrets["gcp_service_account"]
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-            creds = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json", scope)
+            creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
             client = gspread.authorize(creds)
+            
             sheet = client.open("Logistica_Hesed").sheet1
+            sheet.append_row([resumo]) # Salva apenas uma coluna com tudo
             
-            # Envia o resumo completo para a Coluna A da planilha
-            sheet.append_row([resumo_texto])
-            
-            st.success("Dados enviados com sucesso!")
+            st.success("Enviado com sucesso!")
             st.balloons()
-            
         except Exception as e:
-            st.error(f"Erro tecnico ao salvar: {e}")
+            st.error(f"Erro: {e}")
