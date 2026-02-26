@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "logistica-hesed-488604",
+  "private_key_id": "84e0afe71da7fa42b97d2db81479e19025b43b6e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC6axqUbgvIRv9r\nKo9JLyB1nj9yyT3Z/M3kNtkfhrrpdsD1p1npEwnfqE4Xpx+GU2rnvmVWM6IwrAVU\ntq+xBJlkVsuOttBAonCLtuC5i8T9NpiFAfkjhufP0mDw3CWXig2ZLOX8K05w7Wy0\nqhcCOn9qsTrYP66Z/HyIAN2J12Hk8+eQ7rnvaCcmx6d2/gHxWwSn/tdpK/fpNXtw\nahfkBvXj69/OzSJELbaDGs5sBV1Lbm/8VbmMy9vCRtooWqCuEQYEI601DnuCGskk\nROfrpzt9/ADHjkiuBtfutmymOLamtPQQqZQb/orEcdAuXyWNk3R2kH6Wh+uBggRi\nTr0EZ59ZAgMBAAECggEAA0CuKIvZAcgXWc/WyzCa0OKPednADgcmsoYweKfZqAwt\n5rtiSrpN0Ey3/Bqq5qWa9mswinYBLPc7apR7cUvCv2jySU2wSYhsDUwGFMa3C7IB\nrERyC+glME+b6Gf28fNzNEp/wswgpMDHxkk3eI77vSlVfQNzcPViWN8m/mo3J48A\nSUitMFL4mSSgUwHRZ0bYI9G+WZX4CkDOOVmqhwVrYa+k85oKHKfRiDhLU0nj5iWw\nd0vOaC/Sr7eEKKI2gp8eNi4kNdUUs1iXthRV7V0Qy5sD673zN5T7cksrzpyoe+OG\nT6v6YyeTLdkg4M6GJZMYmZx97sojC308HCHuzELMQQKBgQDheNRRpGtExqaSMPO7\n3DlY2buaLT9N2FMscM2YJnlIofFRiy0jQVdPezpWfAx72VOf/T3fY6nOkqmpuZLJ\nIdJPHQR3P21YXRzHVBS9lxk4Vtndwm85LlnyY7yC88eVQEppbkpbGqCHBNNkpUpt\n3CC9SIXqpJcmxeaVUFqFbf0vqQKBgQDTqJ9IZAaj45rgvsnRbEZnthw/SYJoa8+7\nbjrOKpeMjGk7CjQKfzcS9Rw7lbPiqyw/0yckYGDgZvo8ma5maqKZgjAGnbGVrCWC\nDfeGEvYUBF0CgCtFVVGMtw2XXCVwh2+Ir/apBk0JliIeiYzyxhoiXn1NspGMEIE3\n6jTurFWAMQKBgQDeccf+2BjgXKAfoN4GHCoTx5Q3cqZ+1YqRUKT1lBeaGfMsAQRC\nQQezqZ6Pjoj+cxX2xPCTAQ+ZdsaeZTA08QI8/SLXxyLIx+xJl2Fy/qxqEf2VtGro\n3hrtcYqdI4dnb2s6gw4mvalcK92m8Q/yPPer5u3/5ewd26c27nSwKSheKQKBgQDG\nUF71t+rU0iRCYeC83SNWdzYeQiTy69kWd6CXnSaj5MeQLu41y55xn8FVPt3uCo4K\nOzCYj8kVWMcr0p6qjU1OYcHX4RcL8uCt66I5ODji5nezKR3h95/SJY2RfSADQJLL\nUnvdQO8bhVTwodazfdPs0fW7wA1JXAmGt2XjHwt5cQKBgHYs+8sGkFIiGj14kWmB\nu21s9xvcl7JIG0fZIChpAajfa7HJGy6DVsj+IE8KP138a3OSS+gEYbuKrmOXaGoB\nXO0PX8TyL5/PVtbuR+k64nCKbQOtPrqZ/9XL9jLAz/u9VDuK1NPGoPZty0YwqcLm\ntCFC9NYVsRCBdwrBunv8Ble+\n-----END PRIVATE KEY-----\n",
+  "client_email": "logistica-app@logistica-hesed-488604.iam.gserviceaccount.com",
+  "client_id": "100935307283585495939",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/logistica-app%40logistica-hesed-488604.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
