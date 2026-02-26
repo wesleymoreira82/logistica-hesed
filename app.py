@@ -54,7 +54,7 @@ if pedido and nome and cep_input and numero and not st.session_state.erro_cep:
     if st.button("Confirmar e Enviar"):
         try:
             # O TRUQUE DE MESTRE: Puxa a string pura das Secrets e converte para JSON
-            creds_info = json.loads(st.secrets["gcp_json"])
+            creds_info = json.loads(st.secrets["gcp_json"], strict=False)
 
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
             creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
@@ -68,3 +68,4 @@ if pedido and nome and cep_input and numero and not st.session_state.erro_cep:
             st.balloons()
         except Exception as e:
             st.error(f"Erro de autenticação ou salvamento: {e}")
+
