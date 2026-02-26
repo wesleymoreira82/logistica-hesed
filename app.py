@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import gspread
+import json  # Nova biblioteca para ler o texto puro
 from oauth2client.service_account import ServiceAccountCredentials
 
 # 1. Identidade Visual
@@ -52,16 +53,14 @@ if pedido and nome and cep_input and numero and not st.session_state.erro_cep:
     
     if st.button("Confirmar e Enviar"):
         try:
-            # Puxa os dados das Secrets e limpa quebras de linha extras
-            creds_info = dict(st.secrets["gcp_service_account"])
-            if "private_key" in creds_info:
-                creds_info["private_key"] = creds_info["private_key"].replace("\\n", "\n")
+            # O TRUQUE DE MESTRE: Puxa a string pura das Secrets e converte para JSON
+            creds_info = json.loads(st.secrets["gcp_json"])
 
             scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
             creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
             client = gspread.authorize(creds)
             
-            # Salva apenas uma coluna com o resumo completo
+            # Salva na planilha
             sheet = client.open("Logistica_Hesed").sheet1
             sheet.append_row([resumo])
             
